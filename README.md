@@ -34,7 +34,7 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 python -m transformers.onnx --model=. --feature=causal-lm onnx/
 ```
 
-- use netron to view your model, opbserve the inputs and outputs, the GPTOnnx.cs tensor sizes need to match. They should match if you used GPT-Neo, otherwise it will need a bit of modification: https://netron.app/
+- use netron to view your model, observe the inputs and outputs. The tensor sizes in GPTOnnx.cs need to match. They should match if you used GPT-Neo, otherwise it will need a bit of modification: https://netron.app/
 
 - edit the paths on the webserver to point to your model: \Webserver\webserver\GPTGenSingleton.cs
 
