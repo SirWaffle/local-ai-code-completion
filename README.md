@@ -38,7 +38,7 @@ python -m transformers.onnx --model=. --feature=causal-lm onnx/
 
 - edit the paths on the webserver to point to your model: \Webserver\webserver\GPTGenSingleton.cs
 
-- i run this via the cuda execition of ONNX, which requires about 8 GB free of VRAM. If you want to change this, see: \Webserver\genLib\GPTOnnx.cs
+- i run this via the cuda execution of ONNX, which requires about 8 GB free of VRAM. If you want to change this to CPU, see: \Webserver\genLib\GPTOnnx.cs
 ```
 and comment out:
 so.AppendExecutionProvider_CUDA(gpuDeviceId);
