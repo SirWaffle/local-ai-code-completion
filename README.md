@@ -15,12 +15,13 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 - more models for generation, especially code centric models
 - better behavior of plugins ( caching, etc )
 - better management of generation
-- how to setup and what not
+- better how to guide
 
 
-# things in here that obviously bad, but exist just for the example
+# bad code ( should be changed! )
 - webserver only allows one generation of the model at a time, enforced by a semaphor
-- hard coded paths to model locations and waht not
+- hard coded paths to model locations and what not
+- hard coded model input/output sizes
 
 
 # rough directions
@@ -32,8 +33,16 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 ```
 python -m transformers.onnx --model=. --feature=causal-lm onnx/
 ```
-- edit the random hard coded values for paths to models in the genLib project
 
+- use netron to view your model, opbserve the inputs and outputs, the GPTOnnx.cs tensor sizes need to match. They should match if you used GPT-Neo, otherwise it will need a bit of modification: https://netron.app/
+
+- edit the paths on the webserver to point to your model: \Webserver\webserver\GPTGenSingleton.cs
+
+- i run this via the cuda execition of ONNX, which requires about 8 GB free of VRAM. If you want to change this, see: \Webserver\genLib\GPTOnnx.cs
+```
+and comment out:
+so.AppendExecutionProvider_CUDA(gpuDeviceId);
+```
 - run web server
 
 - run web server test program, which will call the web server, generate text, and print to screen
