@@ -22,6 +22,7 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 - webserver only allows one generation of the model at a time, enforced by a semaphor
 - hard coded paths to model locations and what not
 - hard coded model input/output sizes
+- current vscode extension niavely requests generation at every keypress! needs caching and a timer to wait until the user has paused typing
 
 
 # rough directions
