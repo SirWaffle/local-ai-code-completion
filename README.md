@@ -11,7 +11,7 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 
 # roadmap
 - working on making an easily run VSCode extension
-- Visual Studio code suggestion extension
+- Visual Studio suggestion extension
 - more models for generation, especially code centric models
 - better behavior of plugins ( caching, etc )
 - better management of generation
