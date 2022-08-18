@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_base_cased_tok.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_base_cased_tok.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_base_tok.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_base_tok.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_chinese.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_chinese.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_multi_cased.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\bert_multi_cased.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\gpt2.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\gpt2.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser100k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser100k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser250k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser250k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser500k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\laser500k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\libblingfiretokdll.dylib" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\libblingfiretokdll.so" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\roberta.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\roberta.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\syllab.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri100k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri100k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri250k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri250k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri500k.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\uri500k.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\wbd_chuni.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlm_roberta_base.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlm_roberta_base.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlnet.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlnet.i2w" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlnet_nonorm.bin" />
+    <None Remove="C:\Users\wesjo\.nuget\packages\blingfirenuget\0.1.8\contentFiles\cs\any\xlnet_nonorm.i2w" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlingFireNuget" Version="0.1.8" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.12.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.csproj" />
+  </ItemGroup>
+
+</Project>
