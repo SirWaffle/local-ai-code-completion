@@ -22,8 +22,11 @@ namespace webserver.Controllers
         {
             GPTResponse resp = new();
             resp.request = req;
-            var gen = await _gen.DoInference(req.generationSettings);
-            resp.reponseText = gen.ToArray();
+            var gen = await _gen.DoInference(req);
+            if (gen != null)
+                resp.reponseText = gen.ToArray();
+            else
+                resp.reponseText = null;
             return resp;
         }
     }
