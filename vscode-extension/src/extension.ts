@@ -30,8 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
 		provideInlineCompletionItems: async (document, position, context, token) => {
 			console.log('provideInlineCompletionItems triggered');
 
-			//build up dcurrent + past line text to send to GPT web service
-			let promptStr= document.lineAt(position.line ).text;
+			//build up current + past line text to send to GPT web service
+			let promptStr = document.lineAt(position.line ).text;
 			let pastLineCount = 0;
 			while(pastLineCount < PROMPT_LINES && pastLineCount < position.line)
 			{

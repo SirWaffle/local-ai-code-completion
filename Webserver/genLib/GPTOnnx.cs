@@ -23,8 +23,11 @@ namespace genLib
 
         InferenceSession? inferenceSession;
 
-        public void Load(int gpuDevice, string onnxModelPath, string tokenizerPath, string detokenizerPath)
+        int outputTensorSize = 50257; //size for GPTNeo
+
+        public void Load(int gpuDevice, string onnxModelPath, string tokenizerPath, string detokenizerPath, int tensorSizeOutput)
         {
+            outputTensorSize = tensorSizeOutput;
             tokenizerModelPath = tokenizerPath;
             tokenizerModelDecodePath= detokenizerPath;
             gpuDeviceId = gpuDevice;
@@ -175,7 +178,7 @@ namespace genLib
             //prepare array for handling output of network, size = output size,
             //  which corrosponds to one ind for each token id
             // see netron, this should match the output tensor size
-            float[] latestLogits = new float[50257];
+            float[] latestLogits = new float[outputTensorSize];
 
             //array for inputs
             NamedOnnxValue[] input = new NamedOnnxValue[2];

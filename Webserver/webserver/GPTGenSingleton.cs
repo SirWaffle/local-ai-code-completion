@@ -16,7 +16,15 @@ namespace webserver
         string tokenizerPath = @".\..\..\blingfireTokenizerModels\gpt2.bin";
         string detokenPath = @".\..\..\blingfireTokenizerModels\gpt2.i2w";
 
-        string modelPath = @"E:\MLmodels\llm\gpt-neo-1.3B\onnx-casualLM\model.onnx";
+        //string modelPath = @"E:\MLmodels\llm\gpt-neo-1.3B\onnx-casualLM\model.onnx";
+        //int tensorOutputSize = 50257;
+
+        //string modelPath = @"E:\MLModels\codegen\codegen-350M-multi\onnx-causalLM\model.onnx";
+        //int tensorOutputSize = 51200;
+
+        string modelPath = @"E:\MLModels\codegen\codegen-2B-multi\onnx-causalLM\model.onnx";
+        int tensorOutputSize = 51200;
+
         int gpuDeviceId = 0;
 
         int delayTimePerRequestMs = 500;
@@ -28,7 +36,7 @@ namespace webserver
 
         public GPTGenSingleton()
         {
-            gptGenerator.Load(gpuDeviceId, modelPath, tokenizerPath, detokenPath);
+            gptGenerator.Load(gpuDeviceId, modelPath, tokenizerPath, detokenPath, tensorOutputSize);
         }
 
         async public Task<List<string>?> DoInference(GPTRequest req)
@@ -67,6 +75,7 @@ namespace webserver
                     Console.WriteLine("INFERENCING");
                     //go ahead and generate, using the requested prompt from the last spot in the queue
                     results = gptGenerator.DoInference(queuedReq!.generationSettings);
+                    Console.WriteLine("INFERENCING COMPLETE");
                 }
             }
             catch (Exception ex)
