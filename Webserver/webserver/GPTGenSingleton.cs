@@ -17,13 +17,10 @@ namespace webserver
         string detokenPath = @".\..\..\blingfireTokenizerModels\gpt2.i2w";
 
         //string modelPath = @"E:\MLmodels\llm\gpt-neo-1.3B\onnx-casualLM\model.onnx";
-        //int tensorOutputSize = 50257;
 
-        //string modelPath = @"E:\MLModels\codegen\codegen-350M-multi\onnx-causalLM\model.onnx";
-        //int tensorOutputSize = 51200;
+        //string modelPath = @"E:\MyHFModels\codegen-350M-multi-onnx\model.onnx";
 
         string modelPath = @"E:\MLModels\codegen\codegen-2B-multi\onnx-causalLM\model.onnx";
-        int tensorOutputSize = 51200;
 
         int gpuDeviceId = 0;
 
@@ -36,7 +33,7 @@ namespace webserver
 
         public GPTGenSingleton()
         {
-            gptGenerator.Load(gpuDeviceId, modelPath, tokenizerPath, detokenPath, tensorOutputSize);
+            gptGenerator.Load(gpuDeviceId, modelPath, tokenizerPath, detokenPath);
         }
 
         async public Task<List<string>?> DoInference(GPTRequest req)

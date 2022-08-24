@@ -7,6 +7,7 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using BlingFire;
 using DTO;
+using System.Diagnostics;
 
 namespace genLib
 {
@@ -23,11 +24,9 @@ namespace genLib
 
         InferenceSession? inferenceSession;
 
-        int outputTensorSize = 50257; //size for GPTNeo
 
-        public void Load(int gpuDevice, string onnxModelPath, string tokenizerPath, string detokenizerPath, int tensorSizeOutput)
+        public void Load(int gpuDevice, string onnxModelPath, string tokenizerPath, string detokenizerPath)
         {
-            outputTensorSize = tensorSizeOutput;
             tokenizerModelPath = tokenizerPath;
             tokenizerModelDecodePath= detokenizerPath;
             gpuDeviceId = gpuDevice;
@@ -67,31 +66,38 @@ namespace genLib
             return text;
         }
 
-        private List<ValueTuple<int, float>> ToDescendingIntFloatTupleList(float[] vals)
+        private List<ValueTuple<int, float>> ToDescendingIntFloatTupleList(Memory<float> vals)
         {
-            return vals
+            return vals.ToArray()
                 .Select((val, index) => (Index: index, Value: val))
                 .OrderByDescending(result => result.Value)
                 .ToList();
         }
 
-        private float[] Softmax(ref float[] values)
+        public float GetMax(ref Memory<float> values)
         {
-            var maxVal = values.Max();
-            var exp = values.Select(v => Math.Exp(v - maxVal));
-            var sumExp = exp.Sum();
-
-            return exp.Select(v => (float)(v / sumExp)).ToArray();
+            float max = values.Span[0];
+            foreach (float f in values.Span)
+            {
+                if (f > max)
+                    max = f;
+            }
+            return max;
         }
 
-        private void InPlaceSoftmax(ref float[] values)
+        private void InPlaceSoftmax(ref Memory<float> values)
         {
-            float maxVal = values.Max();
-            var exp = values.Select(v => Math.Exp(v - maxVal));
-            var sumExp = exp.Sum();
+            float maxVal = GetMax(ref values);
+            float expSum = 0.0f;
+            for(int i =0; i <  values.Span.Length; ++i)
+            {
+                values.Span[i] = (float)Math.Exp(values.Span[i] - maxVal);
+                expSum += values.Span[i];
+            }
+
 
             for (int i = 0; i < values.Length; i++)
-                values[i] = (float)(Math.Exp(values[i] - maxVal) / sumExp);
+                values.Span[i] /= expSum;
         }
 
         private List<ValueTuple<int, float>> TopKResults(List<ValueTuple<int, float>> orderedList, int top_k = 1)
@@ -175,11 +181,6 @@ namespace genLib
             int numInitialToks = toks.Count;
             List<long> atn_mask = toks.Select(item => item != 0 ? 1L : 0L).ToList();
 
-            //prepare array for handling output of network, size = output size,
-            //  which corrosponds to one ind for each token id
-            // see netron, this should match the output tensor size
-            float[] latestLogits = new float[outputTensorSize];
-
             //array for inputs
             NamedOnnxValue[] input = new NamedOnnxValue[2];
 
@@ -198,14 +199,17 @@ namespace genLib
                 {
 
                     var logits = output.Value as DenseTensor<float>;
+                    //we just need the pile of floats at the end of the tensor                    
+                    int length = logits!.Dimensions[2];
+                    int startInd = logits.Buffer.Length - length;
 
-                    //copy the output logits, shape is (batch) (sequence) (hidden layers logit output)
-                    //see netron , or the specific model to figure out what the outputs are
-                    int a = 0, b = logits!.Dimensions[1] - 1;
-                    for (int c = 0; c < logits.Dimensions[2]; c++)
-                    {
-                        latestLogits[c] = logits[new int[] { a, b, c }];
-                    }
+                    Memory<float> logitsSpan = logits.Buffer.Slice(startInd, length);
+                    
+                    //debug, check to ensure we sliced the right palce
+                    //int a = 0, b = logits!.Dimensions[1] - 1;
+                    //for (int c = 0; c < logits.Dimensions[2]; c++)
+                        //Debug.Assert(logitsSpan.Span[c] == logits[new int[] { a, b, c }]);
+                    
 
                     int selectedToken = -1;
 
@@ -214,11 +218,11 @@ namespace genLib
                     {
                         float curmax = -999.0f;
 
-                        for (int ind = 0; ind < latestLogits.Length; ++ind)
+                        for (int ind = 0; ind < logitsSpan.Span.Length; ++ind)
                         {
-                            if (latestLogits[ind] > curmax)
+                            if (logitsSpan.Span[ind] > curmax)
                             {
-                                curmax = latestLogits[ind];
+                                curmax = logitsSpan.Span[ind];
                                 selectedToken = ind;
                             }
                         }
@@ -227,24 +231,21 @@ namespace genLib
                     //if we have no token, do stuff
                     if(selectedToken == -1)
                     {
-                        //var logProbs = Softmax(latestLogits);
-                        // lets do it in place, save ourselves creating a new array
-                        InPlaceSoftmax(ref latestLogits);
-                        ref float[] logProbs = ref latestLogits; //lazy way to alias the array
+                        InPlaceSoftmax(ref logitsSpan);
 
                         //apply temp
                         if (gen.temperature > 0)
                         {
-                            for (int tempInd = 0; tempInd < logProbs.Length; tempInd++)
+                            for (int tempInd = 0; tempInd < logitsSpan.Span.Length; tempInd++)
                             {
-                                logProbs[tempInd] /= gen.temperature;
+                                logitsSpan.Span[tempInd] /= gen.temperature;
                             }
                         }
 
                         //convert this to a terrible list<ValueTuple<int,float>) for laziness
                         // int = inital index which is the token id
                         // val is the probability
-                        var valList = ToDescendingIntFloatTupleList(logProbs);
+                        var valList = ToDescendingIntFloatTupleList(logitsSpan);
 
                         //do top K
                         if (gen.use_topk && gen.top_k >= 1)
