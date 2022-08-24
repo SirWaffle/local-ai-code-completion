@@ -13,6 +13,7 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 - working on making an easily run VSCode extension
 - Visual Studio suggestion extension
 - more models for generation, especially code centric models
+- huggingfaces repositories of ONNX exported models
 - better behavior of plugins ( caching, etc )
 - better management of generation
 - better how to guide
@@ -21,8 +22,6 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 # bad code ( should be changed! )
 - webserver only allows one generation of the model at a time, enforced by a semaphor
 - hard coded paths to model locations and what not
-- hard coded model input/output sizes
-- current vscode extension niavely requests generation at every keypress! needs caching and a timer to wait until the user has paused typing
 
 
 # rough directions
@@ -35,7 +34,7 @@ lots of things are not effecient, or just plain bad, or hard coded - but a good 
 python -m transformers.onnx --model=. --feature=causal-lm onnx/
 ```
 
-- use netron to view your model, observe the inputs and outputs. The tensor sizes in GPTOnnx.cs need to match. They should match if you used GPT-Neo, otherwise it will need a bit of modification: https://netron.app/
+- use netron to view your model, observe the inputs and outputs. THe input names of the model should match in GPTOnnx.cs: https://netron.app/
 
 - edit the paths on the webserver to point to your model: \Webserver\webserver\GPTGenSingleton.cs
 
@@ -47,5 +46,7 @@ so.AppendExecutionProvider_CUDA(gpuDeviceId);
 - run web server
 
 - run web server test program, which will call the web server, generate text, and print to screen
+
+- run the vscode extension project, and test it out in VSCode!
 
 - (more to come as I get things farther along )
