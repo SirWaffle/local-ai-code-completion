@@ -1,5 +1,5 @@
 # local-ai-code-completion
-Local code completion example, using ONNX models, GPT Neo ( or whatever other model), with a c# webserver, VSCode and Visual Studio extensions, to get similar copilot code completion behavior, at the symbol, line, or full method level
+Local code completion example, using ONNX models, GPT Neo ( or whatever other model), with a c# webserver, VSCode and Visual Studio extensions, to get similar copilot code completion behavior, at the symbol, line, or full method level, running on your own machine!
 
 
 # Currently a work in progress!
