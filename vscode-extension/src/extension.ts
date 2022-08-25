@@ -5,6 +5,11 @@ import fetch from 'node-fetch';
 
 //****These should be settings eventually *******/
 
+//TODO: - better parsing of previous code, such as beggining of function ,etc
+//		- language hints, possibly, depends on the model
+//		- turn stuff into settings instead of this hard coded mess
+//		- Multi-line vs. end of line vs. next token completion settings
+
 //URL of web server for calling with GPT requests
 const WEBSERVER_URL = 'http://localhost:5184/gpt/generate';
 
@@ -43,10 +48,16 @@ export function activate(context: vscode.ExtensionContext) {
 			//console.log(promptStr);
 
 			//configure request
+			//these stopping criteria will stop at EOL
 			const body = {username: 'vscodeExt-' + PROMPT_USERNAME, 
 				generationSettings: { 
 					prompt: promptStr, 
-					return_sequences: 1
+					top_k: 2,
+					return_sequences: 1,
+					stopping_criteria: ['}'],
+					//198 is a newline, forwhatever reason tokenizing a newline doesnt 
+					//get the same token value
+					stopping_criteria_tokIds: [ 198 ], 
 				} 
 			};
 

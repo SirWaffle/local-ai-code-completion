@@ -165,16 +165,64 @@ namespace genLib
             return valList[selectedInd];
         }
 
+        public bool MatchedStopSequence(List<long> toks, List<long[]>? stopToks)
+        {
+            if (stopToks == null)
+                return false;
 
+            foreach (long[] stopSequence in stopToks)
+            {
+                int stopInd = stopSequence.Length - 1;
+                int selectedToksInd = toks.Count - 1;
+
+                if (stopInd > selectedToksInd)
+                    continue;
+
+                for (; stopInd >= 0 && selectedToksInd >= 0; stopInd--, selectedToksInd--)
+                {
+                    if (stopSequence[stopInd] == toks[selectedToksInd])
+                    {
+                        if (stopInd == 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+
+        //TODO: figure out how to keep the tensors on the GPU and use TorchSharp ( or some other method ) of
+        //      doing the softmax/beam search / etc on the GPU instead of CPU <-> GPU each iteration
+        //TODO: beam search
         //TODO: add batches
-        //TODO: early out on stopping token
-        //TODO: convert stopping criteria into an array of arrays of tokens
-        //      then if we generate any of those sequences of tokens, stop generating and return
-        //      stopping sequences for code will most likely be various newlines, escaped and non-escaped
         public List<string> DoInference(GPTGenerationSettings gen)
         {
             //tokenize
             int[] promptTokenIds = Tokenize(gen.prompt);
+
+            //build stopping token lists
+            List<long[]>? stoppingTokens = null;
+            if(gen.stopping_criteria != null && gen.stopping_criteria.Length > 0)
+            {
+                stoppingTokens = new List<long[]>(gen.stopping_criteria.Length);
+                foreach (string str in gen.stopping_criteria)
+                {
+                    stoppingTokens.Add(Tokenize(str).Select(item => (long)item).ToArray());
+                }
+            }
+
+            //hard coded tokenIds for stopping
+            if(gen.stopping_criteria_tokIds != null)
+            {
+                if(stoppingTokens == null)
+                    stoppingTokens = new List<long[]>(gen.stopping_criteria_tokIds.Length);
+
+                foreach(long tokId in gen.stopping_criteria_tokIds)
+                    stoppingTokens.Add(new long[] { tokId });
+            }
 
             //convert to long, make attention mask
             List<long> toks = promptTokenIds.Select(item => (long)item).ToList();
@@ -194,6 +242,9 @@ namespace genLib
                 //inputs for session                
                 input[0] = NamedOnnxValue.CreateFromTensor<long>("input_ids", inputTensor);
                 input[1] = NamedOnnxValue.CreateFromTensor<long>("attention_mask", atnTensor);
+
+                RunOptions options = new RunOptions();
+
 
                 using (var output = inferenceSession!.Run(input).ToList().Last())
                 {
@@ -268,14 +319,21 @@ namespace genLib
 
                     //append mask
                     atn_mask.Add(1);
+
+                    //check for stopping
+                    if (MatchedStopSequence(toks, stoppingTokens))
+                        break;
+
                 }
             }
 
+            //strip off the fed in prompt
             if (gen.removeInitialPrompt)
             {
                 toks = toks.Take(new Range(numInitialToks, toks.Count)).ToList();
             }
 
+            //convert back to text...
             int[] tokArray = toks.Select(item => (int)item).ToArray();
             string text = TokenIdsToText(ref tokArray);
 
