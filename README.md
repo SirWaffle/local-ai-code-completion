@@ -4,7 +4,7 @@ Local code completion example, using ONNX models, GPT Neo ( or whatever other mo
 
 # Currently a work in progress!
 
-this is mostly a least code require, simple example that connects everything together to make your own code completion / code generator, emant to run locall with just one user. Extending it to act as a service for multiple users can work, but there are ineffeciencies and whatnot that should be done for that to work well 
+this is mostly a least code require, simple example that connects everything together to make your own code completion / code generator, meant to run locally with just one user ( but supprts multiple ). Extending it to act as a service for multiple users can work, but there are ineffeciencies and whatnot that should be addressed for that to work well 
 
 This should act as a good jumping off point to customize to your needs, and I will improve stuff as i have time
 
