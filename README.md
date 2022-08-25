@@ -4,12 +4,12 @@ Local code completion example, using ONNX models, GPT Neo ( or whatever other mo
 
 # Currently a work in progress!
 
-this is mostly a least code require, simple example that connects everything together to make your own code completion / code generator, meant to run locally with just one user ( but supprts multiple ). Extending it to act as a service for multiple users can work, but there are ineffeciencies and whatnot that should be addressed for that to work well 
+this is mostly a least code require, simple example that connects everything together to make your own code completion / code generator, meant to run locally with just one user ( but does support multiple users ). Extending it to act as a service for multiple users will work, but there are inefficiencies and whatnot that should be addressed for that to work well 
 
-This should act as a good jumping off point to customize to your needs, and I will improve stuff as i have time
+This should act as a good jumping off point to customize to your needs, and I will improve stuff as I have time
 
 
-# roadmap
+# roadmap / TODO
 - working on making an easily run VSCode extension ( currently i just launch via vscode extension debug )
 - Visual Studio suggestion extension
 - more models for generation, especially code centric models
