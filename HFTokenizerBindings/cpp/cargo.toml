@@ -1,0 +1,15 @@
+[package]
+name = "hftokenizer"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "hftokenizer"
+crate-type = ["cdylib"]
+
+[dependencies]
+cxx = "1.0"
+tokenizers = "0.11.2"
+
+[build-dependencies]
+cxx-build = "1.0"

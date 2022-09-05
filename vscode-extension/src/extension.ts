@@ -11,9 +11,9 @@ import fetch from 'node-fetch';
 //		- Multi-line vs. end of line vs. next token completion settings
 
 //URL of web server for calling with GPT requests
-const WEBSERVER_URL = 'http://localhost:5184/gpt/generate';
+const WEBSERVER_URL = 'http://localhost:5184/codegen/generate';
 
-//max number of previous lines to append to our GPT request
+//max number of previous lines to append to our codegen request
 const PROMPT_LINES = 6;
 
 const PROMPT_USERNAME = "user1";
