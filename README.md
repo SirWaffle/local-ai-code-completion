@@ -27,7 +27,7 @@ This should act as a good jumping off point to customize to your needs, and I wi
 - better how to guide
 - Adding beam search, and multiple samples to the generation code
 - making post processing steps ( searches, softmax, top_k, top_p ) operate in GPU to avoid costly CPU <-> GPU copies of tensors
-- extending the rust interop to huggingface tokenizers to something less hacky and with more features exposed
+- extending the rust interop to huggingface tokenizers to something less hacky and with more features exposed. Make ti thread safe, ensure no memory leaks, add cleanup of rust alloc'ed memory, all that stuff
 
 
 ## bad code ( should be changed! )
@@ -43,7 +43,7 @@ I put an ONNX model and the required tokenizer.json file up on huggingface.  if 
 ## rough directions
 - Webserver is written in visual studio 2022. Open the solution, and build and run the webserver.
 
-- edit the paths on the webserver to point to your model, and token.json file: \Webserver\webserver\Generators\CodeGenSingleton.cs
+- edit the paths on the webserver to point to your model, and tokenizer.json file: \Webserver\webserver\Generators\CodeGenSingleton.cs
 
 - i run this via the cuda execution of ONNX, which requires about 8 GB free of VRAM. If you want to change this to CPU, see: \Webserver\genLib\Generators\CodeGenOnnx.cs
 ```
