@@ -20,6 +20,7 @@ This should act as a good jumping off point to customize to your needs, and I wi
 
 ## roadmap / TODO
 - working on making an easily run VSCode extension ( currently i just launch via vscode extension debug )
+- more plugin optiosn for generating: allow symbol, line, or full function generation via options
 - Visual Studio suggestion extension
 - better behavior of plugins ( caching, etc )
 - better management of generation
