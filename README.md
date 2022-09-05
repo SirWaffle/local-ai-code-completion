@@ -1,6 +1,8 @@
 # local-ai-code-completion
 Local code completion example, using ONNX models, Codegen model ( or whatever other model ), with a c# webserver, VSCode and Visual Studio extensions, to get similar copilot code completion behavior, at the symbol, line, or full method level, running on your own machine!
 
+This repo is setup to use either blingfire, or a questionably made Rust interop to the huggingface tokenizers library for managing tokenizing and converting back to text. The rust interop was put together by me ( i dont know rust ), and i basically just mashed buttons until it worked. No garuntees on safety or no memory leaks or anything,. that will improve in the future...
+
 
 ## more info at githubs/etc
 - codegen model: https://github.com/salesforce/CodeGen
@@ -24,11 +26,13 @@ This should act as a good jumping off point to customize to your needs, and I wi
 - better how to guide
 - Adding beam search, and multiple samples to the generation code
 - making post processing steps ( searches, softmax, top_k, top_p ) operate in GPU to avoid costly CPU <-> GPU copies of tensors
+- extending the rust interop to huggingface tokenizers to something less hacky and with more features exposed
 
 
 ## bad code ( should be changed! )
 - webserver only allows one generation of the model at a time, enforced by a semaphor
 - hard coded paths to model locations and what not in C#, not json files
+- the rust interop was a rapid hack job, it will need improvements
 
 ## premade ONNX model
 I put an ONNX model and the required tokenizer.json file up on huggingface.  if the model isnt there yet, im probably still uploading... :
